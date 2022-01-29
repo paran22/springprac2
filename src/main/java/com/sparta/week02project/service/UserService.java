@@ -1,12 +1,23 @@
 package com.sparta.week02project.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.week02project.dto.KaKaoUserInfoDto;
 import com.sparta.week02project.dto.SignupRequestDto;
 import com.sparta.week02project.entity.User;
 import com.sparta.week02project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -37,4 +48,5 @@ public class UserService {
         User user = new User(username, password, email);
         userRepository.save(user);
     }
+
 }

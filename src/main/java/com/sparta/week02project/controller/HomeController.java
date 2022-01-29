@@ -16,7 +16,10 @@ public class HomeController {
         return "boards";
     }
 
-    //로그인 성공시 boardslogin으로 이동
+    //현재 카카오로그인후 boardslogin으로 이동하지 않는 문제있음.
+
+    //로그인 성공시 boardslogin으로 이동(config설정)
+    //boardlogin에 username전달
     @GetMapping("/boardslogin")
     public String homeLogin(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         model.addAttribute("username", userDetails.getUsername());
