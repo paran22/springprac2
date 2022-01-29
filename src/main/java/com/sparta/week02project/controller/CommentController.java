@@ -23,9 +23,9 @@ public class CommentController {
     }
 
     //댓글 조회하기
-    @GetMapping("/boards/detail/comment/{userId}")
-    public List<Comment> getComment(@PathVariable Long userId) {
-        List<Comment> commentList = commentService.getComment(userId);
+    @GetMapping("/boards/detail/comment/{boardId}")
+    public List<Comment> getComment(@PathVariable Long boardId) {
+        List<Comment> commentList = commentService.getComment(boardId);
         return commentList;
     }
 

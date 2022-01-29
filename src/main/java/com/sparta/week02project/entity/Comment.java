@@ -27,11 +27,15 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private Long userId;
 
+    @Column(nullable = false)
+    private Long boardId;
+
     public Comment(CommentDto commentDto, Long userId, String username) {
         this.userId = userId;
         this.username = username;
         this.title = commentDto.getTitle();
         this.contents = commentDto.getContents();
+        this.boardId = commentDto.getBoardId();
     }
 
 }

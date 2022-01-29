@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    List<Comment> findAllByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Comment> findAllByBoardIdOrderByCreatedAtDesc(Long boardId);
 }

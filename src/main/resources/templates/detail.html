@@ -28,13 +28,14 @@
             crossorigin="anonymous"></script>
 
     <script>
+        //넘어온 값을 id로 지정
+        let id = localStorage.getItem('id');
         $(document).ready(function () {
             getBoard();
+            getCommentList(id);
         })
         //게시글 조회하기
         function getBoard() {
-            //넘어온 값을 id로 지정
-            let id = localStorage.getItem('id');
             $('#board').empty();
             $.ajax({
                 type: "GET",
@@ -45,7 +46,6 @@
                     let contents = board.contents;
                     let username = board.username;
                     let createdAt = board.createdAt;
-                    let userId = board.userId;
                     let temp_html = `<div class="card text-center" id="board">
                                             <div class="card-header">
                                                 <h6>${title}</h6>
@@ -57,17 +57,16 @@
                                             </div>
                                         </div>`
                     $('#board').append(temp_html);
-                    getCommentList(userId);
                 }
             })
         }
 
         //댓글 조회하기
-        function getCommentList(userId) {
+        function getCommentList(id) {
             $("#commentList").empty();
             $.ajax({
                 type: "GET",
-                url: `/boards/detail/comment/${userId}`,
+                url: `/boards/detail/comment/${id}`,
                 success: function (response) {
                     for (let i = 0; i < response.length; i++) {
                         let comment = response[i];
@@ -95,7 +94,7 @@
         function postComment() {
             let title = $('#title').val();
             let contents = $('#contents').val();
-            let data = {'title': title, 'contents': contents}
+            let data = {'title': title, 'contents': contents, 'boardId': id}
             $.ajax({
                 type: "POST",
                 url: "/boards/detail",

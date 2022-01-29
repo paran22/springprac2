@@ -20,8 +20,8 @@ public class CommentService {
     }
 
     //댓글 조회하기
-    public List<Comment> getComment(Long userId) {
-        return commentRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
+    public List<Comment> getComment(Long boardId) {
+        return commentRepository.findAllByBoardIdOrderByCreatedAtDesc(boardId);
     }
 
     //댓글 저장하기
