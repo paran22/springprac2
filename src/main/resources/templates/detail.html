@@ -1,11 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+    <!-- Webpage Title -->
+    <title>항해 블로그</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            getBoard();
+        })
+        //게시글 조회하기
+        function getBoard() {
+            //넘어온 값을 id로 지정
+            let id = localStorage.getItem('id');
+            $('#board').empty();
+            $.ajax({
+                type: "GET",
+                url: `/boards/detail/${id}`,
+                success: function (response) {
+                    let board = response;
+                    let title = board.title;
+                    let contents = board.contents;
+                    let username = board.username;
+                    let createdAt = board.createdAt;
+                    let userId = board.userId;
+                    let temp_html = `<div class="card text-center" id="board">
+                                            <div class="card-header">
+                                                <h6>${title}</h6>
+                                                <p>${username}</p>
+                                                <p>${createdAt}</p>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">${contents}</p>
+                                            </div>
+                                        </div>`
+                    $('#board').append(temp_html);
+                    getCommentList(userId);
+                }
+            })
+        }
+
+        //댓글 조회하기
+        function getCommentList(userId) {
+            $("#commentList").empty();
+            $.ajax({
+                type: "GET",
+                url: `/boards/detail/comment/${userId}`,
+                success: function (response) {
+                    for (let i = 0; i < response.length; i++) {
+                        let comment = response[i];
+                        let title = comment.title;
+                        let contents = comment.contents;
+                        let username = comment.username;
+                        let createdAt = comment.createdAt;
+                        let temp_html = `<div class="card text-center" id="commentList">
+                                            <div class="card-header">
+                                                <h6>${title}</h6>
+                                                <p>${username}</p>
+                                                <p>${createdAt}</p>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">${contents}</p>
+                                            </div>
+                                        </div>`
+                        $('#commentList').append(temp_html);
+                    }
+                }
+            })
+        }
+
+        //댓글 등록하기
+        function postComment() {
+            let title = $('#title').val();
+            let contents = $('#contents').val();
+            let data = {'title': title, 'contents': contents}
+            $.ajax({
+                type: "POST",
+                url: "/boards/detail",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function () {
+                    alert('댓글이 성공적으로 작성되었습니다.');
+                    window.location.reload();
+                }
+            })
+        }
+    </script>
+
+
 </head>
 <body>
-detail
-
+<div class="card text-center" id="board"></div>
+<div>
+    <h4>댓글 작성하기</h4>
+    제목 : <input type="text" id="title"> <br>
+    <textarea id="contents"></textarea><br>
+    <button type="button" onclick="postComment()">등록</button>
+</div>
+<h4>댓글 보기</h4>
+<div class="card text-center" id="commentList"></div>
 </body>
 </html>

@@ -45,7 +45,7 @@
                         let contents = board.contents;
                         let username = board.username;
                         let createdAt = board.createdAt;
-                        let temp_html = `<div class="card text-center" id="boardList" onclick="location.href='detail.html'; throwid(${id})">
+                        let temp_html = `<div class="card text-center" id="boardList" onclick="location.href='/boards/detail'; throwid(${id})">
                                             <div class="card-header">
                                                 <h6>${title}</h6>
                                                 <p>${username}</p>
@@ -68,22 +68,7 @@
 
 
 
-        //게시글 등록하기
-        function postBoard() {
-            let title = $('#title').val();
-            let contents = $('#contents').val();
-            let data = {'title': title, 'contents': contents}
-            $.ajax({
-                type: "POST",
-                url: "/boardslogin/post",
-                contentType: "application/json",
-                data: JSON.stringify(data),
-                success: function () {
-                    alert('게시글이 성공적으로 작성되었습니다.');
-                    window.location.reload()
-                }
-            })
-        }
+
     </script>
 
 </head>
@@ -100,16 +85,10 @@
 <h1>항해 블로그</h1>
 
 <!--게시글 등록하기-->
-<form>
-    제목 : <input type="text" id="title"> <br>
-    <textarea id="contents"></textarea><br>
-    <button onclick="postBoard()">등록</button>
-</form>
+<a class="btn btn-primary" href="/write" role="button">글쓰기</a>
 
 <!--게시글 목록-->
-<div class="card text-center" id="boardList">
-
-</div>
+<div class="card text-center" id="boardList"></div>
 
 </body>
 </html>
