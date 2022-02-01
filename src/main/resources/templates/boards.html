@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <!-- Webpage Title -->
     <title>항해 블로그</title>
@@ -36,7 +36,7 @@
             $("#boardList").empty();
             $.ajax({
                 type: "GET",
-                url: `/boards`,
+                url: '/boards',
                 success: function (response) {
                     for (let i = 0; i < response.length; i++) {
                         let board = response[i];
@@ -72,10 +72,9 @@
 
 </head>
 <body>
+<!--인증하지 않았을때 보이는 화면-->
+<div sec:authorize-expr="!isAuthenticated()">
 <ul class="nav">
-    <li class="nav-item">
-        <a class="nav-link active" href="/">홈으로</a>
-    </li>
     <li class="nav-item">
         <a class="nav-link" href="/user/login">로그인</a>
     </li>
@@ -83,6 +82,19 @@
         <a class="nav-link" href="/user/signup">회원가입</a>
     </li>
 </ul>
+</div>
+<!--인증시 보이는 화면-->
+<div sec:authorize-expr="isAuthenticated()">
+    <a class="btn btn-primary" href="/write" role="button">글쓰기</a>
+
+    <form id="my_form" method="get" action="/user/logout">
+        <a id="logout-text" href="javascript:{}" onclick="document.getElementById('my_form').submit();">로그아웃</a>
+    </form>
+</div>
+
+<div sec:authorize-expr="isAuthenticated()">
+<h1><span sec:authentication="principal.user.username">demo</span>님의</h1>
+</div>
 
 <h1>항해 블로그</h1>
 

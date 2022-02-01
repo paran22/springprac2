@@ -16,15 +16,6 @@ public class HomeController {
         return "boards";
     }
 
-    //현재 카카오로그인후 boardslogin으로 이동하지 않는 문제있음.
-
-    //로그인 성공시 boardslogin으로 이동(config설정)
-    //boardlogin에 username전달
-    @GetMapping("/boardslogin")
-    public String homeLogin(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        model.addAttribute("username", userDetails.getUsername());
-        return "boardslogin";
-    }
 
     //게시글 작성 페이지 호출
     @GetMapping("/write")
@@ -32,9 +23,15 @@ public class HomeController {
         return "write";
     }
 
+
     //게시글 조회하기 페이지 호출
     @GetMapping("/boards/detail")
     public String goDetail() {
         return "detail";
+    }
+
+    @GetMapping("/errorpage")
+    public String goErrorpage() {
+        return "errorpage";
     }
 }

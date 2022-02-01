@@ -46,6 +46,14 @@
     </script>
 </head>
 <body>
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link active" href="/">홈으로</a>
+    </li>
+</ul>
+    <form id="my_form" method="get" action="/user/logout">
+        <a id="logout-text" href="javascript:{}" onclick="document.getElementById('my_form').submit();">로그아웃</a>
+    </form>
 <form>
     제목 : <input type="text" id="title"> <br>
     <textarea id="contents"></textarea><br>

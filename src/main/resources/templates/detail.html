@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 
     <!-- Webpage Title -->
@@ -27,19 +27,22 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 
+
     <script>
         //넘어온 값을 id로 지정
-        let id = localStorage.getItem('id');
+        let boardId = localStorage.getItem('id');
         $(document).ready(function () {
-            getBoard();
-            getCommentList(id);
+            getBoard(boardId);
+            getCommentList(boardId);
         })
+
+
         //게시글 조회하기
-        function getBoard() {
+        function getBoard(boardId) {
             $('#board').empty();
             $.ajax({
                 type: "GET",
-                url: `/boards/detail/${id}`,
+                url: `/boards/detail/${boardId}`,
                 success: function (response) {
                     let board = response;
                     let title = board.title;
@@ -61,40 +64,11 @@
             })
         }
 
-        //댓글 조회하기
-        function getCommentList(id) {
-            $("#commentList").empty();
-            $.ajax({
-                type: "GET",
-                url: `/boards/detail/comment/${id}`,
-                success: function (response) {
-                    for (let i = 0; i < response.length; i++) {
-                        let comment = response[i];
-                        let title = comment.title;
-                        let contents = comment.contents;
-                        let username = comment.username;
-                        let createdAt = comment.createdAt;
-                        let temp_html = `<div class="card text-center" id="commentList">
-                                            <div class="card-header">
-                                                <h6>${title}</h6>
-                                                <p>${username}</p>
-                                                <p>${createdAt}</p>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="card-text">${contents}</p>
-                                            </div>
-                                        </div>`
-                        $('#commentList').append(temp_html);
-                    }
-                }
-            })
-        }
-
         //댓글 등록하기
         function postComment() {
             let title = $('#title').val();
             let contents = $('#contents').val();
-            let data = {'title': title, 'contents': contents, 'boardId': id}
+            let data = {'title': title, 'contents': contents, 'boardId': boardId}
             $.ajax({
                 type: "POST",
                 url: "/boards/detail",
@@ -106,19 +80,146 @@
                 }
             })
         }
-    </script>
 
+        //댓글 조회하기
+        function getCommentList(boardId) {
+            $("#commentList").empty();
+            $.ajax({
+                type: "GET",
+                url: `/boards/detail/comment/${boardId}`,
+                success: function (response) {
+                    for (let i = 0; i < response.length; i++) {
+                        let comment = response[i];
+                        let id = comment.id;
+                        let userId = comment.userId;
+                        let title = comment.title;
+                        let contents = comment.contents;
+                        let username = comment.username;
+                        let createdAt = comment.createdAt;
+                        let temp_html = `<div class="card text-center" id="commentList">
+                                            <div class="card-header">
+                                                <h6>${title}</h6>
+                                                <p>${username}</p>
+                                                <p>${createdAt}</p>
+                                            </div>
+                                            <div class="card-body" id="commentbody">
+                                                <p class="card-text">${contents}</p>
+                                                <button id="updatebutton" type="button" onclick="getComment(${id})">수정</button></span>
+                                            </div>
+                                            <div>
+                                                <button id="deletebutton" type="button" onclick="deleteComment(${id})">삭제</button>
+                                            </div>
+                                        </div>`
+                        $('#commentList').append(temp_html);
+                        let loginId = getLoginInfo();
+                        if (loginId != userId) {
+                            $('#updatebutton').hide();
+                            $('#deletebutton').hide();
+                        }
+                    }
+                }
+            })
+        }
+
+        //loginId받아와 전역변수로 설정하기
+        function getLoginInfo() {
+            var loginId;
+            $.ajax({
+                type: "GET",
+                url: "/logininfo",
+                async: false,
+                success: function (response) {
+                   loginId = response;
+                }
+            })
+            return loginId;
+        }
+
+        //댓글 수정하기
+        //1. 댓글 조회하기
+        function  getComment(id) {
+            $('#commentbody').empty();
+            $.ajax({
+                type: "GET",
+                url: `/boards/comment/${id}`,
+                success: function (response) {
+                    let comment = response;
+                    let id = comment.id;
+                    let title = comment.title;
+                    let contents = comment.contents;
+                    let temp_html = `제목 : <textarea id="updatetitle">${title}</textarea><br>
+                                    <textarea id="updatecontents">${contents}</textarea><br>
+                                    <button type="button" onclick="updateComment(${id})">수정</button>
+                                    <button type="button" onclick="window.location.reload()">수정취소</button>`
+                    $('#commentbody').append(temp_html);
+                }
+            })
+        }
+        //2. 댓글 수정하기
+        function updateComment(id) {
+            let contents = $('#updatecontents').val();
+            let title = $('#updatetitle').val();
+            if (contents == '') {
+                alert("댓글 내용을 입력해주세요.");
+                return;
+            }
+            $.ajax({
+                type: "PUT",
+                url: `/boards/comment/${id}`,
+                contentType: "application/json",
+                data: JSON.stringify({'title': title, 'contents': contents, 'boardId': boardId}),
+                success: function () {
+                    alert('메시지가 수정되었습니다.');
+                    window.location.reload();
+                }
+            })
+        }
+
+        //댓글 삭제하기
+        function deleteComment(id) {
+            //확인을 눌렀을 경우에 ajax로 삭제 실행
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/boards/comment/${id}`,
+                    success: function () {
+                        window.location.reload();
+                    }
+                })
+            } else {
+                //그외에는 페이지 reload
+                window.location.reload();
+            }
+        }
+    </script>
 
 </head>
 <body>
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link active" href="/">홈으로</a>
+    </li>
+</ul>
+<!--인증시 보이는 화면-->
+<div sec:authorize-expr="isAuthenticated()">
+    <form id="my_form" method="get" action="/user/logout">
+        <a id="logout-text" href="javascript:{}" onclick="document.getElementById('my_form').submit();">로그아웃</a>
+    </form>
+</div>
+
 <div class="card text-center" id="board"></div>
 <div>
     <h4>댓글 작성하기</h4>
-    제목 : <input type="text" id="title"> <br>
+    제목 : <input type="text" id="title"><br>
     <textarea id="contents"></textarea><br>
     <button type="button" onclick="postComment()">등록</button>
 </div>
 <h4>댓글 보기</h4>
-<div class="card text-center" id="commentList"></div>
+<div class="card text-center" id="commentList">
+    <div class="card-header">
+        <div class="card-body" id="commentbody">
+        </div>
+    </div>
+</div>
 </body>
 </html>

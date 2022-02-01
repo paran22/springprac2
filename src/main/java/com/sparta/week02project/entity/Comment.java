@@ -4,10 +4,12 @@ import com.sparta.week02project.dto.BoardDto;
 import com.sparta.week02project.dto.CommentDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
+@Setter
 @Getter
 @Entity
 public class Comment extends Timestamped {

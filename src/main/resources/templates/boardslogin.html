@@ -1,94 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Webpage Title -->
-    <title>항해 블로그</title>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    &lt;!&ndash; Webpage Title &ndash;&gt;-->
+<!--    <title>항해 블로그</title>-->
 
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!--    &lt;!&ndash; Required meta tags &ndash;&gt;-->
+<!--    <meta charset="utf-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
+<!--          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
 
-    <!-- Font Awesome CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+<!--    &lt;!&ndash; Font Awesome CSS &ndash;&gt;-->
+<!--    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">-->
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
+<!--    &lt;!&ndash; Optional JavaScript &ndash;&gt;-->
+<!--    &lt;!&ndash; jQuery first, then Popper.js, then Bootstrap JS &ndash;&gt;-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"-->
+<!--            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"-->
+<!--            crossorigin="anonymous"></script>-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"-->
+<!--            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"-->
+<!--            crossorigin="anonymous"></script>-->
 
-    <script>
-        $(document).ready(function () {
-            getBoardList();
-        })
+<!--    <script>-->
+<!--        $(document).ready(function () {-->
+<!--            getBoardList();-->
+<!--        })-->
 
-        //게시글 목록보기
-        function getBoardList() {
-            $("#boardList").empty();
-            $.ajax({
-                type: "GET",
-                url: `/boards`,
-                success: function (response) {
-                    for (let i = 0; i < response.length; i++) {
-                        let board = response[i];
-                        let id = board.id;
-                        let title = board.title;
-                        let contents = board.contents;
-                        let username = board.username;
-                        let createdAt = board.createdAt;
-                        let temp_html = `<div class="card text-center" id="boardList" onclick="location.href='/boards/detail'; throwid(${id})">
-                                            <div class="card-header">
-                                                <h6>${title}</h6>
-                                                <p>${username}</p>
-                                                <p>${createdAt}</p>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="card-text">${contents}</p>
-                                            </div>
-                                        </div>`
-                        $('#boardList').append(temp_html);
-                    }
-                }
-            })
-        }
+<!--        //게시글 목록보기-->
+<!--        function getBoardList() {-->
+<!--            $("#boardList").empty();-->
+<!--            $.ajax({-->
+<!--                type: "GET",-->
+<!--                url: `/boards`,-->
+<!--                success: function (response) {-->
+<!--                    for (let i = 0; i < response.length; i++) {-->
+<!--                        let board = response[i];-->
+<!--                        let id = board.id;-->
+<!--                        let title = board.title;-->
+<!--                        let contents = board.contents;-->
+<!--                        let username = board.username;-->
+<!--                        let createdAt = board.createdAt;-->
+<!--                        let temp_html = `<div class="card text-center" id="boardList" onclick="location.href='/boards/detail'; throwid(${id})">-->
+<!--                                            <div class="card-header">-->
+<!--                                                <h6>${title}</h6>-->
+<!--                                                <p>${username}</p>-->
+<!--                                                <p>${createdAt}</p>-->
+<!--                                            </div>-->
+<!--                                            <div class="card-body">-->
+<!--                                                <p class="card-text">${contents}</p>-->
+<!--                                            </div>-->
+<!--                                        </div>`-->
+<!--                        $('#boardList').append(temp_html);-->
+<!--                    }-->
+<!--                }-->
+<!--            })-->
+<!--        }-->
 
-        //id값을 넘기는 함수
-        function throwid(id) {
-            localStorage.setItem('id', id)
-        }
-
-
+<!--        //id값을 넘기는 함수-->
+<!--        function throwid(id) {-->
+<!--            localStorage.setItem('id', id)-->
+<!--        }-->
 
 
-    </script>
 
-</head>
-<body>
-<ul class="nav">
-    <form id="my_form" method="get" action="/user/logout">
-        <a id="logout-text" href="javascript:{}" onclick="document.getElementById('my_form').submit();">로그아웃</a>
-    </form>
-</ul>
 
-<div id="header-title-login-user">
-    <span th:text="${username}"></span> 님의
-</div>
-<h1>항해 블로그</h1>
+<!--    </script>-->
 
-<!--게시글 등록하기-->
-<a class="btn btn-primary" href="/write" role="button">글쓰기</a>
+<!--</head>-->
+<!--<body>-->
+<!--<ul class="nav">-->
+<!--    <form id="my_form" method="get" action="/user/logout">-->
+<!--        <a id="logout-text" href="javascript:{}" onclick="document.getElementById('my_form').submit();">로그아웃</a>-->
+<!--    </form>-->
+<!--</ul>-->
 
-<!--게시글 목록-->
-<div class="card text-center" id="boardList"></div>
+<!--<div id="header-title-login-user">-->
+<!--    <span th:text="${username}"></span> 님의-->
+<!--</div>-->
+<!--<h1>항해 블로그</h1>-->
 
-</body>
-</html>
+<!--&lt;!&ndash;게시글 등록하기&ndash;&gt;-->
+<!--<a class="btn btn-primary" href="/write" role="button">글쓰기</a>-->
+
+<!--&lt;!&ndash;게시글 목록&ndash;&gt;-->
+<!--<div class="card text-center" id="boardList"></div>-->
+
+<!--</body>-->
+<!--</html>-->

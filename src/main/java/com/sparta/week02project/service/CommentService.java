@@ -20,7 +20,7 @@ public class CommentService {
     }
 
     //댓글 조회하기
-    public List<Comment> getComment(Long boardId) {
+    public List<Comment> getComments(Long boardId) {
         return commentRepository.findAllByBoardIdOrderByCreatedAtDesc(boardId);
     }
 
@@ -29,5 +29,30 @@ public class CommentService {
         Comment comment = new Comment(commentDto, userId, username);
         commentRepository.save(comment);
         return comment;
+    }
+
+    //댓글 수정하기
+    //1. 댓글 조회하기
+    public Comment getComment(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new NullPointerException("해당 아이디가 존재하지 않습니다."));
+        return comment;
+    }
+
+    //2. 댓글 수정하기
+    public Comment updateComment(Long id, CommentDto commentDto) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new NullPointerException("해당 아이디가 존재하지 않습니다."));
+
+        comment.setTitle(commentDto.getTitle());
+        comment.setContents(commentDto.getContents());
+        commentRepository.save(comment);
+
+        return comment;
+    }
+
+    //댓글 삭제하기
+    public void deleteComment(Long id) {
+        commentRepository.deleteById(id);
     }
 }
