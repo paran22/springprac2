@@ -52,6 +52,7 @@
             return loginid;
         }
 
+
         //게시글 조회하기
         function getBoard(boardId) {
             $('#board').empty();
@@ -85,7 +86,7 @@
             //숫자가 아닐경우
             if (isNaN(loginId)) {
                 if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-                    window.location="/user/login";
+                    window.location = "/user/login";
                 } else {
                     window.location.reload();
                 }
@@ -108,7 +109,6 @@
                 }
             })
         }
-
 
         //댓글 조회하기
         function getCommentList(boardId) {
@@ -133,16 +133,28 @@
                                             </div>
                                             <div class="card-body" id="commentbody">
                                                 <p class="card-text">${contents}</p>
-                                                <button id="updatebutton" type="button" onclick="getComment(${id})">수정</button></span>
                                             </div>
-                                            <div>
-                                                <button id="deletebutton" type="button" onclick="deleteComment(${id})">삭제</button>
+                                            <div id="button" class="button">
+                                             <button type="button" onclick="getComment(${id})">수정</button>
+                                             <button type="button" onclick="deleteComment(${id})">삭제</button>
                                             </div>
-                                        </div>`
-                        $('#commentList').append(temp_html);
-                        if (loginId != userId) {
-                            $('#updatebutton').hide();
-                            $('#deletebutton').hide();
+                                            </div>`
+                        let temp_html2 = `<div class="card text-center" id="commentList">
+                                            <div class="card-header">
+                                                <h6>${title}</h6>
+                                                <p>${username}</p>
+                                                <p>${createdAt}</p>
+                                            </div>
+                                            <div class="card-body" id="commentbody">
+                                                <p class="card-text">${contents}</p>
+                                            </div>
+                                            </div>`
+                        if (loginId == userId) {
+                            console.log(loginId)
+                            console.log(userId)
+                            $('#commentList').append(temp_html);
+                        } else {
+                            $('#commentList').append(temp_html2);
                         }
                     }
                 }
@@ -152,7 +164,7 @@
 
         //댓글 수정하기
         //1. 댓글 조회하기
-        function  getComment(id) {
+        function getComment(id) {
             $('#commentbody').empty();
             $.ajax({
                 type: "GET",
@@ -170,6 +182,7 @@
                 }
             })
         }
+
         //2. 댓글 수정하기
         function updateComment(id) {
             let contents = $('#updatecontents').val();
@@ -245,6 +258,8 @@
     <div class="card-header">
         <div class="card-body" id="commentbody">
         </div>
+    </div>
+    <div id="button" class="button">
     </div>
 </div>
 </body>

@@ -26,6 +26,7 @@
             loginCheck();
         })
 
+
         //loginId 전역변수로 설정
         let loginId = getLoginInfo();
 
@@ -83,6 +84,7 @@
             }
         }
 
+
         //회원가입 유효성 확인
         function signup() {
             let username = $('#username').val();
@@ -90,9 +92,11 @@
             let password2 = $('#password2').val();
             let email = $('#email').val();
             var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-
+            var regPass = /\s/g;
             if(password.length < 4) {
                 $(".help_password").html("비밀번호는 4자 이상 입력하세요.")
+            } else if(password.match(regPass)) {
+                $(".help_password").html("비밀번호에 공백을 사용할 수 없습니다.")
             } else if(password.includes(username)) {
                 $(".help_password").html("비밀번호에 username을 사용할 수 없습니다.")
             } else if(password != password2) {

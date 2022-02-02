@@ -1,6 +1,5 @@
 package com.sparta.week02project.entity;
 
-import com.sparta.week02project.dto.BoardDto;
 import com.sparta.week02project.dto.CommentDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
