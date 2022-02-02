@@ -35,7 +35,22 @@
             getBoard(boardId);
             getCommentList(boardId);
         })
+        //loginId 전역변수로 설정
+        let loginId = getLoginInfo();
 
+        //loginId받아와 전역변수로 설정하기
+        function getLoginInfo() {
+            var loginid;
+            $.ajax({
+                type: "GET",
+                url: "/logininfo",
+                async: false,
+                success: function (response) {
+                    loginid = response;
+                }
+            })
+            return loginid;
+        }
 
         //게시글 조회하기
         function getBoard(boardId) {
@@ -65,6 +80,19 @@
         }
 
         //댓글 등록하기
+        //1. 로그인여부 확인하기
+        function loginCheck() {
+            //숫자가 아닐경우
+            if (isNaN(loginId)) {
+                if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+                    window.location="/user/login";
+                } else {
+                    window.location.reload();
+                }
+            }
+        }
+
+        //2. 댓글 등록하기
         function postComment() {
             let title = $('#title').val();
             let contents = $('#contents').val();
@@ -80,6 +108,7 @@
                 }
             })
         }
+
 
         //댓글 조회하기
         function getCommentList(boardId) {
@@ -111,7 +140,6 @@
                                             </div>
                                         </div>`
                         $('#commentList').append(temp_html);
-                        let loginId = getLoginInfo();
                         if (loginId != userId) {
                             $('#updatebutton').hide();
                             $('#deletebutton').hide();
@@ -121,19 +149,6 @@
             })
         }
 
-        //loginId받아와 전역변수로 설정하기
-        function getLoginInfo() {
-            var loginId;
-            $.ajax({
-                type: "GET",
-                url: "/logininfo",
-                async: false,
-                success: function (response) {
-                   loginId = response;
-                }
-            })
-            return loginId;
-        }
 
         //댓글 수정하기
         //1. 댓글 조회하기
@@ -200,6 +215,17 @@
         <a class="nav-link active" href="/">홈으로</a>
     </li>
 </ul>
+<!--인증하지 않았을때 보이는 화면-->
+<div sec:authorize-expr="!isAuthenticated()">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/user/login">로그인</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/user/signup">회원가입</a>
+        </li>
+    </ul>
+</div>
 <!--인증시 보이는 화면-->
 <div sec:authorize-expr="isAuthenticated()">
     <form id="my_form" method="get" action="/user/logout">
@@ -210,8 +236,8 @@
 <div class="card text-center" id="board"></div>
 <div>
     <h4>댓글 작성하기</h4>
-    제목 : <input type="text" id="title"><br>
-    <textarea id="contents"></textarea><br>
+    제목 : <input type="text" id="title" onclick="loginCheck()"><br>
+    <textarea id="contents" onclick="loginCheck()"></textarea><br>
     <button type="button" onclick="postComment()">등록</button>
 </div>
 <h4>댓글 보기</h4>

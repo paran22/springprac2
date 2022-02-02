@@ -243,3 +243,12 @@ input[type=submit] {
     border: 1px solid transparent;
     border-radius: .25rem;
 }
+.help_id{
+    color: red;
+}
+.help_password{
+    color: red;
+}
+.help_email{
+    color: red;
+}

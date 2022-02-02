@@ -10,13 +10,53 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <meta charset="UTF-8">
     <title>로그인 페이지</title>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
     <script>
+        $(document).ready(function () {
+            loginCheck();
+        })
+        //loginId 전역변수로 설정
+        let loginId = getLoginInfo();
+
+        //loginId받아와 전역변수로 설정하기
+        function getLoginInfo() {
+            var loginid;
+            $.ajax({
+                type: "GET",
+                url: "/logininfo",
+                async: false,
+                success: function (response) {
+                    loginid = response;
+                }
+            })
+            return loginid;
+        }
+
+        //로그인 되어있는 경우
+        function loginCheck() {
+            //숫자가 아닐경우
+            if (!isNaN(loginId)) {
+                if (window.confirm("이미 로그인이 되어있습니다.")) {
+                    window.location="/";
+                }
+            }
+        }
 
     </script>
 </head>
 <body>
 <div id="login-form">
-    <div id="login-title">Log into Select Shop</div>
+    <div id="login-title">Log in</div>
     <button id="login-kakao-btn" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=cbd2615ce87bd616ee1561ca14ec3a92&redirect_uri=http://localhost:8080/user/kakao/callback&response_type=code'">
         카카오로 로그인하기
     </button>

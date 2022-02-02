@@ -39,11 +39,10 @@ public class UserService {
     public void registerUser(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         // 회원 ID 중복 확인
-        Optional<User> found = userRepository.findByUsername(username);
-        if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 닉네임입니다.");
-        }
-
+//        Optional<User> found = userRepository.findByUsername(username);
+//        if (found.isPresent()) {
+//            throw new IllegalArgumentException("중복된 닉네임입니다.");
+//        }
         // 패스워드 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
 
@@ -53,13 +52,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Map<String, String> validateHandling(Errors errors) {
-        Map<String, String> validatorResult = new HashMap<>();
-
-        for (FieldError error : errors.getFieldErrors()) {
-            String validKeyName = String.format("valid_%s", error.getField());
-            validatorResult.put(validKeyName, error.getDefaultMessage());
-        }
-        return validatorResult;
+    //username 중복확인
+    public boolean checkUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

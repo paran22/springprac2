@@ -3,20 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
     <script>
-        $(document).ready(function () {
-            errormessage();
-        })
-
-        function errormessage() {
-            alert("로그인이 필요합니다.");
-            window.href="/user/login";
-
-        }
     </script>
 </head>
 <body>
 로그인이 필요합니다.
+<button onclick="window.location='/user/login'">로그인페이지로 이동하기</button>
+<button onclick="window.location='/'">홈으로 이동하기</button>
 </body>
 </html>
