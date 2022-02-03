@@ -29,6 +29,9 @@ public class UserService {
     public void registerUser(SignupRequestDto requestDto) {
         if (SignupValidation.validationSignupInput(requestDto)) {
             String username = requestDto.getUsername();
+            if (userRepository.existsByUsername(username)) {
+                throw new IllegalArgumentException("중복된 username 입니다.");
+            }
             // 패스워드 암호화
             String password = passwordEncoder.encode(requestDto.getPassword());
             String email = requestDto.getEmail();

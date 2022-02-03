@@ -216,30 +216,47 @@ class UserServiceTest {
         @Test
         @DisplayName("중복1")
         void checkUsername1() {
+            //given
+            SignupRequestDto requestDto = new SignupRequestDto(
+                    "admin1",
+                    "a0123456789",
+                    "a0123456789",
+                    "abc@gmail.net"
+            );
 
-            //중복되는 username이 있다고 가정하면
             given(userRepository.existsByUsername(any())).willReturn(true);
-            String username = "admin1";
 
-            //when
-            boolean result = userService.checkUsername(username);
-            //then
-            assertTrue(result);
+
+            // when
+            Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+                userService.registerUser(requestDto);
+            });
+
+            // then
+            assertEquals("중복된 username 입니다.", exception.getMessage());
         }
 
         @Test
         @DisplayName("중복2")
         void checkUsername2() {
+            //given
+            SignupRequestDto requestDto = new SignupRequestDto(
+                    "piano2",
+                    "a0123456789",
+                    "a0123456789",
+                    "abc@gmail.net"
+            );
 
-            //중복되는 username이 있다고 가정하면
             given(userRepository.existsByUsername(any())).willReturn(true);
-            String username = "Admin22";
 
-            //when
-            boolean result = userService.checkUsername(username);
-            //then
-            assertTrue(result);
 
+            // when
+            Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+                userService.registerUser(requestDto);
+            });
+
+            // then
+            assertEquals("중복된 username 입니다.", exception.getMessage());
         }
 
     }
