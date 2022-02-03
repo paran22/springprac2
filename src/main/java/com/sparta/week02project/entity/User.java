@@ -1,5 +1,7 @@
 package com.sparta.week02project.entity;
 
+import com.sparta.week02project.dto.SignupRequestDto;
+import com.sparta.week02project.validation.SignupValidation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,6 +34,7 @@ public class User {
     private Long kakaoId;
 
     public User(String username, String password, String email) {
+
         this.username = username;
         this.password = password;
         this.email = email;
